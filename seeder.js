@@ -6,7 +6,7 @@ require("dotenv").config();
 //connection To DB
 connectToDB();
 
-//import books (seeding database)
+//import projects (seeding database)
 
 const importproj =async () =>{
     try{
@@ -21,12 +21,12 @@ const importproj =async () =>{
 
 
 
-//remove  books 
+//remove  projects 
 
 const removeproj =async () =>{
     try{
   await project.insertMany(project);
-   console.log("Book Removed!");
+   console.log("project Removed!");
     }
     catch(error){
         console.log(error);

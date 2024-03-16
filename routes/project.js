@@ -59,7 +59,7 @@ router.post("/", verifyTokenandAdmin,asyncHandler(async(req,res) => {
 }));
 
 /**
- * update author 
+ * update project 
  * @route /api/projects
  * @method Post
  * @access private (only admin)
@@ -89,8 +89,8 @@ router.put("/:id",verifyTokenandAdmin,asyncHandler(async(req,res)=>{
 }));
 
 /**
- * Delete author 
- * @route /api/authors
+ * Delete project 
+ * @route /api/projects
  * @method Post
  * @access private (only admin)
  */
