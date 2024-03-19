@@ -6,13 +6,10 @@ const {verifyTokenandAdmin}=require("../middleware/verifyToken");
 const { project, validateCreateProject, validateUpdateProject } = require("../models/Project");
 
 
-// router.get("/",asyncHandler(
-//     async(req,res)=>{
-//         const{pageNumber}= req.query;
-//      const authorList = await Author.find().skip().limit(2);
-//      res.status(200).json(authorList);
-     
-// }));
+router.get("/", asyncHandler(async(req, res) => {
+  const projects = await project.find();
+  res.status(200).json(projects);
+}));
 
 router.get("/:id",asyncHandler(async(req,res)=>{
    
