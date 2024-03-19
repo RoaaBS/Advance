@@ -53,6 +53,29 @@ groupsize: {
    required: true,
    trim: true,
  
+},
+teamMembers: {
+  type: [{
+    memberName: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    memberId: {
+      type: String,
+      required: true,
+      trim: true
+
+    },
+    memberRole: {
+      type: String,
+      required: true,
+      trim: true
+
+    }
+  }]
+  
+
 }
 
 },{
