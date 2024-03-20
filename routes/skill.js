@@ -40,6 +40,24 @@ router.post("/",asyncHandler(async(req,res) => {
     }));
 
 
+    router.get("/:userId", asyncHandler(async (req, res) => {
+        const userId = req.params.userId;
+    
+        try {
+            const user = await userskill.findOne({ UserID: userId });
+    
+            if (user) {
+                res.status(200).json({ user: user });
+            } else {
+                res.status(404).json({ message: "User not found" });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    }));
+
+
 /**
  * Get All users with a certain skill
  * @route GET /api/skill/:skill/s
