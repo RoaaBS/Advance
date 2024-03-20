@@ -18,7 +18,10 @@ app.use(logger);
 app.use("/api/projects",require("./routes/project"));
 app.use("/api/auth",require("./routes/auth"));
 app.use("/api/users",require("./routes/users"));
-app.use("/api/projects/:id/showcases",require("./routes/showcase"));
+app.use("/api/showcases",require("./routes/showcase"));
+app.use("/api/skill",require("./routes/skill"));
+
+//app.use("/api/projects/:id/showcases",require("./routes/showcase"));
  // Error Handler Midleware
  app.use(notFound);
  app.use(errorHandler);

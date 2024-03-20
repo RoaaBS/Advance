@@ -4,6 +4,8 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const { verifyTokenandAdmin } = require("../middleware/verifyToken");
 const { showcase, validateCreateShowcase, validateUpdateShowcase } = require("../models/Showcase");
+const { project, validateCreateProject, validateUpdateProject } = require("../models/Project");
+
 
 
 
@@ -17,6 +19,8 @@ const { showcase, validateCreateShowcase, validateUpdateShowcase } = require("..
  * @access private (only admin)
  */
 
+
+
 router.post("/", verifyTokenandAdmin,asyncHandler(async(req,res) => {
     const { error }= validateCreateShowcase(req.body);
 
@@ -26,19 +30,26 @@ router.post("/", verifyTokenandAdmin,asyncHandler(async(req,res) => {
  }
 
 
+ const pro = await project.findById(req.body.project);
+ if(pro){
+   res.status(200).json(pro);
+   const show= new showcase({
+     project: req.body.project, 
+     projectOwner: req.body.projectOwner,
+     title: req.body.title,
+     description: req.body.description,
+     Team: req.body.Team
+    });
+  
+   const result= await show.save();
+ 
+  res.status(201).json(result);
+ 
+ } else{
+   res.status(404).json({message:"project not found "});
+ }
 
-    const show= new showcase({
-        projects: req.body.id, 
-        projectOwner: req.body.projectOwner,
-        title: req.body.title,
-        description: req.body.description,
-        Team: req.body.Team
-       });
-     
-      const result= await show.save();
-    
-     res.status(201).json(result);
-
+   
 
 }));
 
