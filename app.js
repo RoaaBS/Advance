@@ -20,6 +20,7 @@ app.use("/api/auth",require("./routes/auth"));
 app.use("/api/users",require("./routes/users"));
 app.use("/api/showcases",require("./routes/showcase"));
 app.use("/api/skill",require("./routes/skill"));
+app.use("/api/resourceSharing",require("./routes/ResourseSharing"));
 
 //app.use("/api/projects/:id/showcases",require("./routes/showcase"));
  // Error Handler Midleware
