@@ -4,7 +4,7 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const { verifyTokenandAdmin } = require("../middleware/verifyToken");
 const { showcase, validateCreateShowcase, validateUpdateShowcase } = require("../models/Showcase");
-
+const { project } = require("../models/Project"); // Corrected import
 
 
 
@@ -28,7 +28,7 @@ router.post("/", verifyTokenandAdmin,asyncHandler(async(req,res) => {
 
 
     const show= new showcase({
-        projects: req.body.id, 
+        project: req.body.id, 
         projectOwner: req.body.projectOwner,
         title: req.body.title,
         description: req.body.description,
@@ -50,7 +50,7 @@ router.put("/:showcaseId", verifyTokenandAdmin, asyncHandler(async (req, res) =>
 
     const show = await showcase.findByIdAndUpdate(req.params.showcaseId, { // Using req.params.showcaseId
         $set: {
-            projects: req.params.id,
+            project: req.params.id,
             projectOwner: req.body.projectOwner,
             title: req.body.title,
             description: req.body.description,
@@ -62,9 +62,9 @@ router.put("/:showcaseId", verifyTokenandAdmin, asyncHandler(async (req, res) =>
 }));
 
 router.delete("/:showcaseId", verifyTokenandAdmin, asyncHandler(async (req, res) => {
-    const show = await showcase.findById(req.params.showcaseId); // Using req.params.showcaseId
+    const show = await showcase.findById(req.params.showcaseId); 
     if (show) {
-        await showcase.findByIdAndDelete(req.params.showcaseId); // Using req.params.showcaseId
+        await showcase.findByIdAndDelete(req.params.showcaseId); 
         res.status(200).json({ message: "Showcase has been deleted" });
     } else {
         res.status(404).json({ message: "Showcase not found" });
