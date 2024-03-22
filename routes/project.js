@@ -13,7 +13,7 @@ router.get("/", asyncHandler(async(req, res) => {
 
 router.get("/:id",asyncHandler(async(req,res)=>{
    
-        const pro = await project.findById(req.params.id);
+      const pro = await project.findById(req.params.id);
      if(pro){
        res.status(200).json(pro);
     } else{
