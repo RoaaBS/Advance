@@ -2,9 +2,77 @@ const express = require ("express");
 const router= express.Router();
 const asyncHandler =require("express-async-handler");
 const bcrypt =require("bcryptjs");
-const { User, validateUpdateUser } = require("../models/User");
+const { User, validateUpdateUser,validateUser } = require("../models/User");
 
 const{ verifyTokenandAuthorization,verifyTokenandAdmin} =require("../middleware/verifyToken");
+const nodemailer = require('nodemailer');
+
+
+
+
+/**
+ * create new user
+ * @route POST /api/users
+ * @access private 
+ */
+router.post("/", asyncHandler(async(req, res) => {
+    const { error } = validateUser(req.body);
+
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const newUser = new User({
+        email: req.body.email,
+        username: req.body.username,
+        password: req.body.password,
+        location: req.body.location,
+        isAdmin: req.body.isAdmin
+    });
+
+  //  try {
+        const result = await newUser.save();
+
+        // Send email to the user
+      //  const transporter = nodemailer.createTransport({
+          //  service: 'gmail',
+          //  host: 'smtp.gmail.com',
+           //  port:  587,
+           // secure: false,
+   // auth: {
+      //  user: '',
+      //  pass: ''
+  //  },
+       
+      //  });
+
+       // const mailOptions = {
+         //   from: '',
+          //  to: newUser.email,
+           // subject: 'Welcome to our platform!',
+           // text: `Hello ${newUser.username},\n\nWelcome to our platform! Your account has been successfully created.`
+      //  };
+
+      //  transporter.sendMail(mailOptions, (error, info) => {
+          //  if (error) {
+          //      console.error('Error sending email:', error);
+          //  } else {
+           //     console.log('Email sent:', info.response);
+           // }
+     //   });
+
+     //   res.status(201).json(result);
+  //  } catch (err) {
+      //  console.error('Error creating user:', err);
+       // res.status(500).json({ message: 'Internal Server Error' });
+   // }
+}));
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////
 
 
 

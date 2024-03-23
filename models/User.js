@@ -26,6 +26,13 @@ const UserSchema = new mongoose.Schema({
         minlength:6,
         
     },
+    location:{
+        type:String,
+      //  required:true,
+        trim:true,
+        minlength:6,
+        
+    },
     isAdmin:{
         type:Boolean,
         default:false,
@@ -38,6 +45,20 @@ UserSchema.methods.generateToken =function(){
 }
 //userModel
 const User =mongoose.model("User",UserSchema);
+
+function validateUser(obj) {
+    const schema = Joi.object({
+        email: Joi.string().required().trim().min(5).max(100),
+        username: Joi.string().required().trim().min(2).max(100),
+        password: Joi.string().required().trim().min(6),
+        location: Joi.string().trim().min(6),
+        isAdmin: Joi.boolean().default(false)
+    });
+
+    return schema.validate(obj);
+}
+
+
 
 //Validate Register User
 function validateRegisterUser(obj){
@@ -72,6 +93,7 @@ function validateUpdateUser(obj){
 }
 module.exports ={
     User,
+    validateUser,
     validateUpdateUser,
     validateLoginUser,
     validateRegisterUser
