@@ -4,9 +4,13 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const { verifyTokenandAdmin } = require("../middleware/verifyToken");
 const { showcase, validateCreateShowcase, validateUpdateShowcase } = require("../models/Showcase");
+<<<<<<< HEAD
+const { project } = require("../models/Project"); // Corrected import
+=======
 const { project, validateCreateProject, validateUpdateProject } = require("../models/Project");
 
 
+>>>>>>> b4308a69bf9eff18f0d60844898f629d056d22cc
 
 
 
@@ -49,7 +53,22 @@ router.post("/", verifyTokenandAdmin,asyncHandler(async(req,res) => {
    res.status(404).json({message:"project not found "});
  }
 
+<<<<<<< HEAD
+    const show= new showcase({
+        project: req.body.id, 
+        projectOwner: req.body.projectOwner,
+        title: req.body.title,
+        description: req.body.description,
+        Team: req.body.Team
+       });
+     
+      const result= await show.save();
+    
+     res.status(201).json(result);
+
+=======
    
+>>>>>>> b4308a69bf9eff18f0d60844898f629d056d22cc
 
 }));
 
@@ -61,7 +80,7 @@ router.put("/:showcaseId", verifyTokenandAdmin, asyncHandler(async (req, res) =>
 
     const show = await showcase.findByIdAndUpdate(req.params.showcaseId, { // Using req.params.showcaseId
         $set: {
-            projects: req.params.id,
+            project: req.params.id,
             projectOwner: req.body.projectOwner,
             title: req.body.title,
             description: req.body.description,
@@ -73,9 +92,9 @@ router.put("/:showcaseId", verifyTokenandAdmin, asyncHandler(async (req, res) =>
 }));
 
 router.delete("/:showcaseId", verifyTokenandAdmin, asyncHandler(async (req, res) => {
-    const show = await showcase.findById(req.params.showcaseId); // Using req.params.showcaseId
+    const show = await showcase.findById(req.params.showcaseId); 
     if (show) {
-        await showcase.findByIdAndDelete(req.params.showcaseId); // Using req.params.showcaseId
+        await showcase.findByIdAndDelete(req.params.showcaseId); 
         res.status(200).json({ message: "Showcase has been deleted" });
     } else {
         res.status(404).json({ message: "Showcase not found" });
