@@ -23,8 +23,9 @@ app.use("/api/skill",require("./routes/skill"));
 app.use("/api/resourceSharing",require("./routes/ResourseSharing"));
 //app.use("/api/en",require("./routes/mail"));
 //app.use("/api/externalapi",require("./routes/extirnalapi"));
-app.use("/api/weather",require("./routes/externailapi"));
+app.use("/api/weather",require("./routes/externalapi"));
 app.use("/api/mail",require("./routes/mail"));
+app.use("/api/collaborative",require("./routes/Collaborative"));
 
 
 
