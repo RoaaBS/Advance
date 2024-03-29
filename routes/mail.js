@@ -9,13 +9,13 @@ async function sendEmail(email, cityName, weatherData) {
     const transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
-        user: '', // Your Gmail email address
+        user: 's11941236@stu.najah.edu', // Your Gmail email address
         pass: '' // Your Gmail password
       }
     });
 
     const mailOptions = {
-      from: '', // Your Gmail email address
+      from: 's11941236@stu.najah.edu', // Your Gmail email address
       to: email,
       subject: `Weather Update for ${cityName}`,
       text: `Weather in ${cityName}: ${weatherData}`

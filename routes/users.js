@@ -46,14 +46,14 @@ router.post("/", asyncHandler(async(req, res) => {
        const transporter = nodemailer.createTransport({
            service: 'gmail',
     auth: {
-       user: '',
+       user: 's11941236@stu.najah.edu',
        pass: ''
     },
        
         });
 
         const mailOptions = {
-           from: '',
+           from: 's11941236@stu.najah.edu',
            to: newUser.email,
             subject: 'Welcome to our platform!',
             text: `Hello ${newUser.username},\n\nWelcome to our platform! Your account has been successfully created.\n Weather in ${newUser.location}: ${weatherData}`

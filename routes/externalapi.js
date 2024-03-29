@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 const Weather = require('../models/weather'); // Assuming you have a Weather model
 
-router.get('/', async (req, res) => {
+router.get('/:city', async (req, res) => {
   try {
     const city = req.params.city; // Extracting city from query parameters
     if (!city) {
