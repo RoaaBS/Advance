@@ -18,7 +18,7 @@ async function sendEmail(email, cityName, weatherData) {
       from: '', // Your Gmail email address
       to: email,
       subject: `Weather Update for ${cityName}`,
-      text: `Weather in ${cityName}: ${weatherData.weather[0].description}`
+      text: `Weather in ${cityName}: ${weatherData}`
     };
 
     await transporter.sendMail(mailOptions);
@@ -43,7 +43,7 @@ router.get('/:city/:email', async (req, res) => {
     }
 
     // Fetch weather data for the city from the database
-    const weatherData = await Weather.findOne({ name: cityName });
+    const weatherData = await Weather.findOne({ city: cityName });
 
     if (!weatherData) {
       return res.status(404).json({ error: 'Weather data not found for the city' });

@@ -8,6 +8,9 @@ const{ verifyTokenandAuthorization,verifyTokenandAdmin} =require("../middleware/
 const nodemailer = require('nodemailer');
 
 
+const Weather = require('../models/weather'); // Assuming you have a Weather model
+
+
 
 
 /**
@@ -30,42 +33,46 @@ router.post("/", asyncHandler(async(req, res) => {
         isAdmin: req.body.isAdmin
     });
 
-  //  try {
+   try {
         const result = await newUser.save();
 
+        const weatherData = await Weather.findOne({ city: newUser.location });
+
+    if (!weatherData) {
+      return res.status(404).json({ error: 'Weather data not found for the city' });
+    }
+
         // Send email to the user
-      //  const transporter = nodemailer.createTransport({
-          //  service: 'gmail',
-          //  host: 'smtp.gmail.com',
-           //  port:  587,
-           // secure: false,
-   // auth: {
-      //  user: '',
-      //  pass: ''
-  //  },
+       const transporter = nodemailer.createTransport({
+           service: 'gmail',
+    auth: {
+       user: '',
+       pass: ''
+    },
        
-      //  });
+        });
 
-       // const mailOptions = {
-         //   from: '',
-          //  to: newUser.email,
-           // subject: 'Welcome to our platform!',
-           // text: `Hello ${newUser.username},\n\nWelcome to our platform! Your account has been successfully created.`
-      //  };
+        const mailOptions = {
+           from: '',
+           to: newUser.email,
+            subject: 'Welcome to our platform!',
+            text: `Hello ${newUser.username},\n\nWelcome to our platform! Your account has been successfully created.\n Weather in ${newUser.location}: ${weatherData}`
+        };
 
-      //  transporter.sendMail(mailOptions, (error, info) => {
-          //  if (error) {
-          //      console.error('Error sending email:', error);
-          //  } else {
-           //     console.log('Email sent:', info.response);
-           // }
-     //   });
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+               console.error('Error sending email:', error);
+           } else {
+                console.log('Email sent:', info.response);
+            }
+       });
+    
 
-     //   res.status(201).json(result);
-  //  } catch (err) {
-      //  console.error('Error creating user:', err);
-       // res.status(500).json({ message: 'Internal Server Error' });
-   // }
+        res.status(201).json(result);
+    } catch (err) {
+        console.error('Error creating user:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 }));
 
 
