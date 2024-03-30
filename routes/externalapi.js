@@ -3,6 +3,15 @@ const router = express.Router();
 const axios = require('axios');
 const Weather = require('../models/weather'); // Assuming you have a Weather model
 
+
+
+
+// the api sent the city then get the tempurture 
+// the form is :
+// city:"Ţūbās"
+//temperature:292.45
+//temperatureC:19
+//temperatureF:66
 router.get('/:city', async (req, res) => {
   try {
     const city = req.params.city; // Extracting city from query parameters

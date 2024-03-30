@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
+
+
+
 const ProjectSchema = new mongoose.Schema({
   projectType:{
       type:String,
@@ -60,6 +63,10 @@ groupsize: {
 });
 
 
+
+
+
+
 const project =mongoose.model("project",ProjectSchema);
 
 function validateCreateProject(obj) {
@@ -77,6 +84,10 @@ function validateCreateProject(obj) {
    return schema.validate(obj);
 }
 
+
+
+
+
 function validateUpdateProject(obj) {
   const schema = Joi.object({
     projectType: Joi.string().trim().min(3).max(200).required(),
@@ -90,6 +101,10 @@ function validateUpdateProject(obj) {
     });
  
    return schema.validate(obj);
+
+
+
+
 }
 module.exports = {
   project,
