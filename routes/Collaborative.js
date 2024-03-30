@@ -12,7 +12,7 @@ const { collaborative, validateCreateCollaborative} = require("../models/Collabo
  * @access public
  */
 
- router.get("/:id/team",asyncHandler(async(req,res)=>{
+ router.get("/:id",asyncHandler(async(req,res)=>{
     
     const pro =await collaborative.findOne({ProjectID: req.params.id}).populate('ProjectID');
      if (pro) {
@@ -34,7 +34,7 @@ const { collaborative, validateCreateCollaborative} = require("../models/Collabo
    * @access private (only admin)
    */
   
-   router.post("/:id/team", verifyTokenandAdmin, asyncHandler(async(req,res)=>{
+   router.post("/:id", verifyTokenandAdmin, asyncHandler(async(req,res)=>{
       
     
     const memberName = req.body.memberName;
@@ -67,11 +67,11 @@ const { collaborative, validateCreateCollaborative} = require("../models/Collabo
    * @access private (only admin)
    */
   
-  router.put("/:id/team/:memberId", verifyTokenandAdmin, asyncHandler(async(req,res)=>{
+  router.put("/:id", verifyTokenandAdmin, asyncHandler(async(req,res)=>{
       
     
     
-    const memberId = req.params.memberId;
+    const memberId = req.body.memberId;
     const memberRole = req.body.memberRole;
     
     console.log(memberId)
@@ -84,7 +84,7 @@ const { collaborative, validateCreateCollaborative} = require("../models/Collabo
         res.status(404).json({ message: "project not found"});
       }
       else {
-        res.status(200).json(pro);
+        res.status(200).json({message:"Update Done"});
      
       }
           }
@@ -116,7 +116,9 @@ const { collaborative, validateCreateCollaborative} = require("../models/Collabo
         res.status(404).json({ message: "project not found"});
       }
       else {
-        res.status(200).json(pro);
+       // res.status(200).json(pro);
+        res.status(200).json({ message: "Delete Done"});
+
      
       }
           }

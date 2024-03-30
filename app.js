@@ -26,6 +26,9 @@ app.use("/api/resourceSharing",require("./routes/ResourseSharing"));
 app.use("/api/weather",require("./routes/externalapi"));
 app.use("/api/mail",require("./routes/mail"));
 app.use("/api/collaborative",require("./routes/Collaborative"));
+app.use("/api/upload",require("./routes/upload"));
+
+
 
 
 

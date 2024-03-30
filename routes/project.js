@@ -58,7 +58,7 @@ router.post("/", verifyTokenandAdmin,asyncHandler(async(req,res) => {
 /**
  * update project 
  * @route /api/projects
- * @method Post
+ * @method Put
  * @access private (only admin)
  */
 router.put("/:id",verifyTokenandAdmin,asyncHandler(async(req,res)=>{
@@ -80,7 +80,8 @@ router.put("/:id",verifyTokenandAdmin,asyncHandler(async(req,res)=>{
         }
     
        },{new:true});
-       res.status(200).json(pro);
+       //res.status(200).json(pro);
+       res.status(200).json({message:"Update Done"});
        
  
 }));
@@ -88,7 +89,7 @@ router.put("/:id",verifyTokenandAdmin,asyncHandler(async(req,res)=>{
 /**
  * Delete project 
  * @route /api/projects
- * @method Post
+ * @method DELETE
  * @access private (only admin)
  */
 

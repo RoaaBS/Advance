@@ -1,24 +1,35 @@
-const express = require ("express");
-const router= express.Router();
-const asyncHandler =require("express-async-handler");
-const bcrypt =require("bcryptjs");
-const { User, validateUpdateUser,validateUser } = require("../models/User");
+const express = require("express");
+const router = express.Router();
+const asyncHandler = require("express-async-handler");
+const bcrypt = require("bcryptjs");
+const { User, validateUpdateUser, validateUser } = require("../models/User");
 
-const{ verifyTokenandAuthorization,verifyTokenandAdmin} =require("../middleware/verifyToken");
+const { verifyTokenandAuthorization, verifyTokenandAdmin } = require("../middleware/verifyToken");
 const nodemailer = require('nodemailer');
-
+const multer = require('multer');
+const path = require('path');
 
 const Weather = require('../models/weather'); // Assuming you have a Weather model
 
+// Configure multer storage for photo uploads
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, path.join(__dirname, "../images")); // Set the destination folder for uploaded images
+    },
+    filename: function(req, file, cb) {
+        cb(null, new Date().toISOString() + file.originalname); // Set the filename for the uploaded image
+    }
+});
 
-
+// Initialize multer with the configured storage
+const upload = multer({ storage });
 
 /**
- * create new user
+ * create new user with photo
  * @route POST /api/users
  * @access private 
  */
-router.post("/", asyncHandler(async(req, res) => {
+router.post("/", upload.single('photo'), asyncHandler(async(req, res) => {
     const { error } = validateUser(req.body);
 
     if (error) {
@@ -30,43 +41,42 @@ router.post("/", asyncHandler(async(req, res) => {
         username: req.body.username,
         password: req.body.password,
         location: req.body.location,
-        isAdmin: req.body.isAdmin
+        isAdmin: req.body.isAdmin,
+        photo: req.file ? req.file.filename : "default.jpg" // Save the filename of the uploaded photo or use default if no photo uploaded
     });
 
-   try {
+    try {
         const result = await newUser.save();
 
         const weatherData = await Weather.findOne({ city: newUser.location });
 
-    if (!weatherData) {
-      return res.status(404).json({ error: 'Weather data not found for the city' });
-    }
+        if (!weatherData) {
+            return res.status(404).json({ error: 'Weather data not found for the city' });
+        }
 
         // Send email to the user
-       const transporter = nodemailer.createTransport({
-           service: 'gmail',
-    auth: {
-       user: 's11941236@stu.najah.edu',
-       pass: ''
-    },
-       
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 's11941236@stu.najah.edu',
+                pass: ''
+            },
         });
 
         const mailOptions = {
-           from: 's11941236@stu.najah.edu',
-           to: newUser.email,
+            from: 's11941236@stu.najah.edu',
+            to: newUser.email,
             subject: 'Welcome to our platform!',
             text: `Hello ${newUser.username},\n\nWelcome to our platform! Your account has been successfully created.\n Weather in ${newUser.location}: ${weatherData}`
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-               console.error('Error sending email:', error);
-           } else {
+            if (error) {
+                console.error('Error sending email:', error);
+            } else {
                 console.log('Email sent:', info.response);
             }
-       });
-    
+        });
 
         res.status(201).json(result);
     } catch (err) {
@@ -75,50 +85,50 @@ router.post("/", asyncHandler(async(req, res) => {
     }
 }));
 
-
-
-
-
-//////////////////////////////////////////////////////////////////////////
-
-
-
 /**
- * @desc   update  user
+ * @desc   update user with photo
  * @route /api/auth/:id
- * @method post
+ * @method PUT
  * @access private
  */
-router.put("/:id",verifyTokenandAuthorization,asyncHandler(async(req,res)=>{
-   
-    const { error }= validateUpdateUser(req.body);
+router.put("/:id", upload.single('photo'), asyncHandler(async(req, res) => {
 
+  //  const { error } = validateUpdateUser(req.body);
+    const updatedData = {};
 
-    if(error){
-      return res.status(400).json({ message:error.details[0].message});
+    // Update photo if uploaded, otherwise keep the existing one
+    if (req.file) {
+        updatedData.photo = req.file.filename;
     }
 
-
-
-    if(req.body.password){
-        const salt = await bcrypt.genSalt(10);
-        req.body.password =await bcrypt.hash(req.body.password,salt);
-    }
-    const updateduser = await User.findByIdAndUpdate(req.params.id,{
-        $set: {
-            email:req.body.email,
-            password:req.body.password,
-            username:req.body.username
-        }
-    
-       },{new:true}).select("-password");
-       res.status(200).json(updateduser);
-       
- 
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, { $set: { ...req.body, ...updatedData } }, { new: true }).select("-password");
+    res.status(200).json(updatedUser);
 }));
 
 
+/**
+ * PUT - Update any thing to user
+ * @route /api/skillid
+ * @method PUT
+ * @access private 
+ */
 
+
+router.put("/:id", asyncHandler(async (req, res) => {
+  
+    const user= await User.findByIdAndUpdate(req.params.id, { 
+        $set: {
+            email: req.body.email,
+            username: req.body.username,
+            password: req.body.password,
+            location: req.body.location,
+            isAdmin: req.body.isAdmin,
+  
+        }
+    }, { new: true });
+  
+    res.status(200).json(user);
+  }));
 
 /**
  * @desc  Get all users 
