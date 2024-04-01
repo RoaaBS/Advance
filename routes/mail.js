@@ -9,13 +9,13 @@ async function sendEmail(email, cityName, weatherData) {
     const transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
-        user: 'communicraftbackend@gmail.com', // Your Gmail email address
-        pass: 'amna1hadeel2roaa3aya4@@@@' // Your Gmail password
+        user: process.env.USER_EMAIL,
+        pass: process.env.USER_PASS
       }
     });
 
     const mailOptions = {
-      from: 'communicraftbackend@gmail.com', // Your Gmail email address
+      from:process.env.USER_EMAIL, // Your Gmail email address
       to: email,
       subject: `Weather Update for ${cityName}`,
       text: `Weather in ${cityName}: ${weatherData}`

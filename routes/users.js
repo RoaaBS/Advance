@@ -36,6 +36,9 @@ router.post("/", upload.single('photo'), asyncHandler(async(req, res) => {
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
     }
+
+    const salt = await bcrypt.genSalt(10);
+  req.body.password = await bcrypt.hash(req.body.password, salt);
   
     const newUser = new User({
         email: req.body.email,
@@ -63,14 +66,14 @@ router.post("/", upload.single('photo'), asyncHandler(async(req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 's11941236@stu.najah.edu',
-                pass: ''
+                user: process.env.USER_EMAIL,
+                pass: process.env.USER_PASS
             },
            // debug: true,
         });
 
         const mailOptions = {
-            from: 's11941236@stu.najah.edu',
+            from: process.env.USER_EMAIL,
             to: newUser.email,
             subject: 'Welcome to our platform!',
             text: `Hello ${newUser.username},\n\nWelcome to our platform! Your account has been successfully created.\n Weather in ${newUser.location}: ${weatherData}`
