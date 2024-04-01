@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
-const { User, validateUpdateUser, validateUser } = require("../models/User");
+const { User, validateUpdateUser, validateUser, validateRegisterUser} = require("../models/User");
 
 const { verifyTokenandAuthorization, verifyTokenandAdmin } = require("../middleware/verifyToken");
 const nodemailer = require('nodemailer');
@@ -30,22 +30,27 @@ const upload = multer({ storage });
  * @access private 
  */
 router.post("/", upload.single('photo'), asyncHandler(async(req, res) => {
-    const { error } = validateUser(req.body);
+    const { error } = validateRegisterUser(req.body);
+
 
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
     }
-
+  
     const newUser = new User({
         email: req.body.email,
         username: req.body.username,
         password: req.body.password,
         location: req.body.location,
-        isAdmin: req.body.isAdmin,
         photo: req.file ? req.file.filename : "default.jpg" // Save the filename of the uploaded photo or use default if no photo uploaded
-    });
+        
+    }   
+      
+    );
+    
 
     try {
+        
         const result = await newUser.save();
 
         const weatherData = await Weather.findOne({ city: newUser.location });
@@ -61,6 +66,7 @@ router.post("/", upload.single('photo'), asyncHandler(async(req, res) => {
                 user: 's11941236@stu.najah.edu',
                 pass: ''
             },
+           // debug: true,
         });
 
         const mailOptions = {
