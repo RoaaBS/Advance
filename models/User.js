@@ -29,7 +29,11 @@ const UserSchema = new mongoose.Schema({
     location:{
         type:String,
         trim:true,
+<<<<<<< HEAD
         minlength:6,
+=======
+        minlength:2,
+>>>>>>> 884cd7f8827e6ac6ed119d1e468aaf98411591fc
     },
     isAdmin:{
         type:Boolean,
@@ -54,7 +58,11 @@ function validateUser(obj) {
         email: Joi.string().required().trim().min(5).max(100),
         username: Joi.string().required().trim().min(2).max(100),
         password: Joi.string().required().trim().min(6),
+<<<<<<< HEAD
         location: Joi.string().trim().min(6),
+=======
+        location: Joi.string().trim().min(2),
+>>>>>>> 884cd7f8827e6ac6ed119d1e468aaf98411591fc
         isAdmin: Joi.boolean().default(false),
         photo: Joi.string() // Adjust validation to include photo
     });
@@ -68,7 +76,11 @@ function validateRegisterUser(obj){
         email: Joi.string().trim().min(5).max(100).required().email(),
         username: Joi.string().trim().min(2).max(100).required(),
         password: Joi.string().trim().min(6).required(),
+<<<<<<< HEAD
         location: Joi.string().trim().min(6),
+=======
+        location: Joi.string().trim().min(2),
+>>>>>>> 884cd7f8827e6ac6ed119d1e468aaf98411591fc
         photo: Joi.string() // Adjust validation to include photo
     });
 
@@ -91,7 +103,11 @@ function validateUpdateUser(obj){
         email: Joi.string().trim().min(5).max(100).required().email(),
         username: Joi.string().trim().min(2).max(100),
         password: Joi.string().trim().min(6),
+<<<<<<< HEAD
         location: Joi.string().trim().min(6),
+=======
+        location: Joi.string().trim().min(2),
+>>>>>>> 884cd7f8827e6ac6ed119d1e468aaf98411591fc
         photo: Joi.string() // Adjust validation to include photo
     });
 
