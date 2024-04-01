@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
     location:{
         type:String,
         trim:true,
-        minlength:6,
+        minlength:2,
     },
     isAdmin:{
         type:Boolean,
@@ -54,7 +54,7 @@ function validateUser(obj) {
         email: Joi.string().required().trim().min(5).max(100),
         username: Joi.string().required().trim().min(2).max(100),
         password: Joi.string().required().trim().min(6),
-        location: Joi.string().trim().min(6),
+        location: Joi.string().trim().min(2),
         isAdmin: Joi.boolean().default(false),
         photo: Joi.string() // Adjust validation to include photo
     });
@@ -68,7 +68,7 @@ function validateRegisterUser(obj){
         email: Joi.string().trim().min(5).max(100).required().email(),
         username: Joi.string().trim().min(2).max(100).required(),
         password: Joi.string().trim().min(6).required(),
-        location: Joi.string().trim().min(6),
+        location: Joi.string().trim().min(2),
         photo: Joi.string() // Adjust validation to include photo
     });
 
@@ -91,7 +91,7 @@ function validateUpdateUser(obj){
         email: Joi.string().trim().min(5).max(100).required().email(),
         username: Joi.string().trim().min(2).max(100),
         password: Joi.string().trim().min(6),
-        location: Joi.string().trim().min(6),
+        location: Joi.string().trim().min(2),
         photo: Joi.string() // Adjust validation to include photo
     });
 
